@@ -22,9 +22,10 @@ HyperFlex clusters need to be registered with VMware vCenter. Fill in the HyperF
 
 `hx_vcenter_register.py -f <path to hx_vcenter_register_input.xlsx file>`
 
-```
+The below example shows the registration of two HyperFlex clusters using the script...
 
-(hx_vcenter_register) hx_vcenter_register$ ./hx_vcenter_register.py -f ./test_inputs.xlsx
+```
+$> hx_vcenter_register.py -f ./hx_vcenter_register_input.xlsx
 
 --------------------------------------------------------------------------------------------
 HyperFlex Cluster FQDN/IP: 10.1.20.13
