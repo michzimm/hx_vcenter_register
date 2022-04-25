@@ -22,7 +22,7 @@ HyperFlex clusters need to be registered with VMware vCenter. Fill in the HyperF
 
 `hx_vcenter_register.py -f <path to hx_vcenter_register_input.xlsx file>`
 
-The below example shows the registration of two HyperFlex clusters using the script...
+The below example shows the registration of two HyperFlex clusters using the script...the first shows a cluster that has a version of HXDP that is not supported, the second cluster shows a successful registration.
 
 ```
 $> hx_vcenter_register.py -f ./hx_vcenter_register_input.xlsx
