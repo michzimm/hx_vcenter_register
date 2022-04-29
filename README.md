@@ -31,6 +31,11 @@ $> ./hx_vcenter_register.py
 
 $> hx_vcenter_register.py -f ./hx_vcenter_register_input.xlsx
 
+Enter the HyperFlex username: <user>
+Enter HyperFlex password: <enter>
+Enter vCenter SSO username: <enter>
+Enter vCenter SSO password: <enter>
+
 --------------------------------------------------------------------------------------------
 HyperFlex Cluster FQDN/IP: 10.1.25.13
 HyperFlex Cluster UUID: 3029990785758872471:5276190994489465083
