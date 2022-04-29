@@ -25,7 +25,21 @@ HyperFlex clusters need to be registered with VMware vCenter. Fill in the HyperF
 The below example shows the registration of two HyperFlex clusters using the script...the first shows a cluster that has a version of HXDP that is not supported, the second cluster shows a successful registration.
 
 ```
-$> hx_vcenter_register.py -f ./hx_vcenter_register_input.xlsx
+hx_vcenter_register$ ./hx_vcenter_register.py
+
+    USAGE: hx_vcenter_register.py -f <excel_data_file.xlsx>
+
+hx_vcenter_register.py -f ./hx_vcenter_register_input.xlsx
+
+--------------------------------------------------------------------------------------------
+HyperFlex Cluster FQDN/IP: 10.1.25.13
+HyperFlex Cluster UUID: 3029990785758872471:5276190994489465083
+HyperFlex Cluster Version: 5.0.1a
+vCenter Register API Supported: Yes
+VMware Datacenter: rtp
+VMware ESXi Cluster: Groot
+vCenter Registration Status: Registered
+Note: None
 
 --------------------------------------------------------------------------------------------
 HyperFlex Cluster FQDN/IP: 10.1.20.13
@@ -34,12 +48,4 @@ HyperFlex Cluster Version: 4.0.2b
 vCenter Register API Supported: No
 vCenter Registration Status: Not Registered
 Note: HyperFlex software version does not support vCenter registration API, must use "stcli cluster reregister" command
-
---------------------------------------------------------------------------------------------
-HyperFlex Cluster FQDN/IP: 10.1.25.13
-HyperFlex Cluster UUID: 3029990785758872471:5276190994489465083
-HyperFlex Cluster Version: 5.0.1a
-vCenter Register API Supported: Yes
-vCenter Registration Status: Registered
-Note: None
 ```
