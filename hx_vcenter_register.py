@@ -6,6 +6,7 @@ import re
 import argparse
 from openpyxl import load_workbook
 from colorama import Fore, Back, Style
+import getpass
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -18,7 +19,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 if len(sys.argv) != 3:
     print ('''
-    USAGE: hx_vcenter_register.py <excel_data_file.xlsx>
+    USAGE: hx_vcenter_register.py -f <excel_data_file.xlsx>
     ''')
     sys.exit(0)
 
@@ -29,7 +30,7 @@ if len(sys.argv) != 3:
 ####################################################################################################
 
 parser = argparse.ArgumentParser()
-help_str = 'EXCEL file with HyperFlex cluster data.  Default: ./hx_vcenter_register_data.xlsx'
+help_str = 'EXCEL file with HyperFlex cluster data.'
 parser.add_argument('-f', '--input_file')
 args = parser.parse_args()
 
@@ -43,6 +44,21 @@ args = parser.parse_args()
 wb = load_workbook(args.input_file)
 ws = wb['hx_cluster_info']
 
+
+####################################################################################################
+#
+# GET USERNAME AND PASSWORDS IF NECESSARY
+#
+####################################################################################################
+
+
+print("")
+hx_user = input("Enter HyperFlex username: ")
+hx_pass = getpass.getpass("Enter HyperFlex password: ")
+vc_user = input("Enter vCenter SSO username: ")
+vc_pass = getpass.getpass("Enter vCenter SSO password: ")
+
+
 ####################################################################################################
 #
 # ITERATE OVER EACH LINE IN EXCEL FILE
@@ -53,13 +69,7 @@ print ("")
 for row in ws.iter_rows(min_row=2, values_only=True):
 
     hx_ip = row[0]
-    hx_user = row[1]
-    hx_pass = row[2]
-    vc_ip = row[3]
-    vc_user = row[4]
-    vc_pass = row[5]
-    vc_dc = row[6]
-    vc_clust = row[7]
+    vc_ip = row[1]
 
     print ("--------------------------------------------------------------------------------------------")
     print ("HyperFlex Cluster FQDN/IP: "+Style.BRIGHT+hx_ip+Style.RESET_ALL)
@@ -153,6 +163,32 @@ for row in ws.iter_rows(min_row=2, values_only=True):
     if float(short_version) >= float("4.5"):
 
         print ("vCenter Register API Supported: Yes")
+
+        ####################################################################################################
+        #
+        # GET VMWARE DATACENTER AND ESXI CLUSTER DETAILS
+        #
+        ####################################################################################################
+
+        details_url = "https://"+hx_ip+"/coreapi/v1/hypervisor/vcenter"
+        details_headers = {"Content-Type":"application/json","Authorization": "Bearer "+token+""}
+
+        try:
+            details_response = requests.get(details_url, headers = version_headers, verify = False)
+            details_response_json = details_response.json()
+            vc_dc = details_response_json['vCenterDatacenter']
+            vc_clust = details_response_json['vCenterClusterName']
+            print ("VMware Datacenter: "+vc_dc)
+            print ("VMware ESXi Cluster: "+vc_clust)
+            details_succeed = True
+        except:
+            details_succeed = False
+
+        if not details_response.ok or details_succeed == False:
+            print ("vCenter Registration Status: "+Fore.RED+"Not Registered"+Style.RESET_ALL)
+            print ("Note: Failed to retrieve associated VMware Datacenter and ESXi Cluster")
+            print ("")
+            continue
 
         ####################################################################################################
         #
